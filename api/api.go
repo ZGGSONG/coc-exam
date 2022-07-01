@@ -20,6 +20,14 @@ func Ping(ctx *gin.Context) {
 func Search(ctx *gin.Context) {
 	var model []model.Subject
 	var que = ctx.Query("question")
+	if que == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code": http.StatusOK,
+			"msg":  "Please Input your question...",
+			"data": "",
+		})
+		return
+	}
 	tmp := fmt.Sprintf("%v%v%v", "%", que, "%")
 	global.GLO_DB.Where("Question LIKE ?", tmp).Find(&model)
 	switch len(model) {
@@ -50,7 +58,7 @@ func Search(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"code": http.StatusOK,
 			"msg":  "Successfully",
-			"data": model[0],
+			"data": model,
 		})
 	default:
 		ctx.JSON(http.StatusOK, gin.H{

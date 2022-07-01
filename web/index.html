@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>COC搜题</title>
+    <style>
+        #box{
+            width: 400px;
+            margin: 30px auto;
+            font-family: 'Microsoft YaHei';
+            font-size: 14px;
+        }
+        input{
+            width: 260px;
+            border: 1px solid #e2e2e2;
+            border-radius: 3px;
+            height: 30px;
+            float: left;
+            background-repeat: no-repeat;
+            background-size: 25px;
+            background-position:5px center;
+            padding:0 0 0 40px;
+        }
+        #search{
+            width: 78px;
+            height: 32px;
+            float: right;
+            background: black;
+            color: white;
+            text-align: center;
+            line-height: 32px;
+            cursor: pointer;
+        }
+        #result{
+            width: 600px;
+            margin: 0 auto;
+            top: 50%;
+            left: 50%;
+        }
+        .m-question-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .m-options {
+            color: #aaaaaa;
+        }
+        .m-answer {
+            font-weight: bold;
+        }
+        .m-no-results {
+            font-weight: bold;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <input type="text" id="input" placeholder="请输入题目进行搜索...">
+        <div id="search" onclick="search()">搜索</div>
+    </div>
+    </br></br></br>
+    <div id="result">
+    </div>
+</body>
+<script type="text/javascript">
+    function search() {
+        const url = document.location.href
+        const xmlHttp = new XMLHttpRequest();
+        const text = document.getElementById("input").value;
+        if (text == "") {
+            alert("Please enter your question...");
+            return;
+        }
+        const httpUrl = url + "search?question=" + text;
+        xmlHttp.open("GET", httpUrl, false);
+        xmlHttp.send(null);
+        const txt=xmlHttp.responseText;
+        const obj = JSON.parse(txt);
+        let tmp = '';
+        if(obj.data.length > 0){
+            for (let key of obj.data) {
+                let ops = key.options.split(' ')
+                let type = '';
+                switch (key.type) {
+                    case 'single':
+                        type = '单选';
+                        break;
+                    case 'multiple':
+                        type = '多选';
+                        break;
+                    default:
+                        type = '判断';
+                }
+                tmp += '</br>' + '<div class="m-question-title">' + '【' + type + '】 ' + key.question + '</div>' + '</br>';
+                for (let i = 0; i < ops.length; i++) {
+                    tmp += '<div class="m-options">' + key.options.split(' ')[i] + '</div>';
+                }
+                tmp +='</br>' + '<div class="m-answer">参考答案: ' + key.answer + '</div>' + '</br>';
+            }
+        } else {
+            tmp +='</br>' + '<div class="m-no-results">查询无果！！！' + '</div>' + '</br>';
+        }
+        document.getElementById("result").innerHTML = tmp;
+        document.getElementById("input").value = "";
+    }
+</script>
+</html>
