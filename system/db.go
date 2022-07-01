@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DBPATH = "./"
+	DBPATH = "./coc-question-bank.sql"
 )
 
 func InitDB() (*gorm.DB, error) {
