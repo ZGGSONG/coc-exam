@@ -13,4 +13,6 @@ func main() {
 	}
 	log.Println("Connecting to database successfully...")
 
+	system.InitGin()
+	log.Println("Init Gin successfully...")
 }
