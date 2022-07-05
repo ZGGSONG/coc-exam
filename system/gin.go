@@ -16,8 +16,12 @@ func InitGin() {
 	}
 
 	r.LoadHTMLFiles("./web/index.html")
+	r.StaticFile("/favicon.ico", "./web/favicon.ico")
 	r.GET("/", func(context *gin.Context) {
-		context.HTML(http.StatusOK, "index.html", nil)
+		context.HTML(http.StatusOK, "index.html", gin.H{
+			"title": "COC搜题",
+			"icon":  "/favicon.ico",
+		})
 	})
 	r = router.CollectRoute(r)
 	fmt.Println("open with http://localhost:8080")

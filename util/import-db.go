@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	FILEPATH = "/Users/song/projects/go/coc-question-bank/util/coc.txt"
+	FILEPATH = "/Users/song/projects/go/coc-question-bank/util/coc2.txt"
 )
 
 //导入TXT至数据库
@@ -35,6 +35,7 @@ func main() {
 	}
 	//log.Println(string(bytes))
 	var mType, mQuestion, mOptions, mAnswer string
+	var usefulCount, uselessCount int64
 	msg := strings.Split(string(bytes), "\r\n")
 	for _, value := range msg {
 		//无效数据
@@ -69,14 +70,21 @@ func main() {
 			pos := strings.Index(value[comma:], "")
 			mAnswer = value[comma+pos+3:] //取出答案
 			//fmt.Println(mType + " " + mQuestion + " " + mOptions + " " + mAnswer)
-			db.Create(&model.Subject{Type: mType, Question: mQuestion, Options: mOptions, Answer: mAnswer, UpdateTime: time.Now()})
+			var tmp model.Subject
+			db.Where("Question", mQuestion).First(&tmp)
+			if tmp.ID == 0 {
+				db.Create(&model.Subject{Type: mType, Question: mQuestion, Options: mOptions, Answer: mAnswer, UpdateTime: time.Now()})
+				usefulCount++
+			} else {
+				uselessCount++
+			}
 			//清空变量
 			mOptions = ""
 			mAnswer = ""
 			mQuestion = ""
 		}
 	}
-	fmt.Println("插入完成...")
+	fmt.Println(fmt.Sprintf("插入%v条有效数据,过滤%v无效数据", usefulCount, uselessCount))
 }
 
 func readFile(filepath string) ([]byte, error) {
