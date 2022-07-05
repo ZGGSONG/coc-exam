@@ -7,6 +7,10 @@ import (
 	"net/http"
 )
 
+const (
+	PORT = 50020
+)
+
 func InitGin() {
 	//初始化Gin
 	r := gin.Default()
@@ -24,6 +28,6 @@ func InitGin() {
 		})
 	})
 	r = router.CollectRoute(r)
-	fmt.Println("open with http://localhost:8080")
-	panic(r.Run("0.0.0.0:8080"))
+	fmt.Println(fmt.Sprintf("open http://127.0.0.1:%v", PORT))
+	panic(r.Run(fmt.Sprintf("0.0.0.0:%v", PORT)))
 }
