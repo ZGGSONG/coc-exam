@@ -96,7 +96,9 @@ func Put(ctx *gin.Context) {
 	bytes, err := ioutil.ReadAll(open)
 	var mType, mQuestion, mOptions, mAnswer string
 	var usefulCount, uselessCount int64
-	msg := strings.Split(string(bytes), "\r\n")
+	strBytes := string(bytes)
+	strBytes = strings.ReplaceAll(strBytes, "\r\n", "\n") //CRLF => LF
+	msg := strings.Split(strBytes, "\n")
 	var flag = false
 	for _, value := range msg {
 		//无效数据
