@@ -11,6 +11,9 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"os/exec"
+	"runtime"
+	"time"
 )
 
 //go:embed web/*
@@ -20,6 +23,21 @@ const (
 	PORT = 50020
 )
 
+var commands = map[string]string{
+	"windows": "start",
+	"darwin":  "open",
+	"linux":   "xdg-open",
+}
+
+func Open(uri string) error {
+	run, ok := commands[runtime.GOOS]
+	if !ok {
+		return fmt.Errorf("don't know how to open things on %s platform", runtime.GOOS)
+	}
+
+	cmd := exec.Command(run, uri)
+	return cmd.Start()
+}
 func main() {
 	db, err := system.InitDB()
 	if err != nil {
@@ -45,6 +63,9 @@ func main() {
 		})
 	})
 	r = router.CollectRoute(r)
-	fmt.Println(fmt.Sprintf("open http://127.0.0.1:%v", PORT))
+	go func() {
+		time.Sleep(500 * time.Millisecond)
+		Open("http://127.0.0.1:50020")
+	}()
 	panic(r.Run(fmt.Sprintf("0.0.0.0:%v", PORT)))
 }
