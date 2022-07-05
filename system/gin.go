@@ -11,6 +11,9 @@ const (
 	PORT = 50020
 )
 
+////go:embed ../web/*
+//var fs embed.FS
+
 func InitGin() {
 	//初始化Gin
 	r := gin.Default()
@@ -21,11 +24,9 @@ func InitGin() {
 
 	r.LoadHTMLFiles("./web/index.html")
 	r.StaticFile("/favicon.ico", "./web/favicon.ico")
+	//r.StaticFS("/", http.FS(fs))
 	r.GET("/", func(context *gin.Context) {
-		context.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "COC搜题",
-			"icon":  "/favicon.ico",
-		})
+		context.HTML(http.StatusOK, "index.html", nil)
 	})
 	r = router.CollectRoute(r)
 	fmt.Println(fmt.Sprintf("open http://127.0.0.1:%v", PORT))
