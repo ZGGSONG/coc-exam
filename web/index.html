@@ -9,7 +9,7 @@
         #box{
             width: 400px;
             margin: 30px auto;
-            font-family: 'Microsoft YaHei';
+            font-family: 'Heiti SC';
             font-size: 14px;
         }
         input{
@@ -27,6 +27,7 @@
             width: 78px;
             height: 32px;
             float: right;
+            border-radius: 3px;
             background: black;
             color: white;
             text-align: center;
@@ -58,6 +59,51 @@
             font-weight: bold;
             font-size: 30px;
         }
+        #upload-button{
+            position: relative;
+            display: inline-block;
+            background: #D0EEFF;
+            border: 1px solid #99D3F5;
+            border-radius: 4px;
+            padding: 4px 4px;
+            overflow: hidden;
+            color: #1E88C7;
+            text-decoration: none;
+            text-indent: 0;
+            line-height: 20px;
+            cursor: pointer;
+        }
+        .file {
+            position: relative;
+            display: inline-block;
+            background: #D0EEFF;
+            border: 1px solid #99D3F5;
+            border-radius: 4px;
+            padding: 4px 4px;
+            overflow: hidden;
+            color: #1E88C7;
+            text-decoration: none;
+            text-indent: 0;
+            line-height: 20px;
+        }
+        .file input {
+            position: absolute;
+            font-size: 80px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+        .file:hover {
+            background: #AADFFD;
+            border-color: #78C3F3;
+            color: #004974;
+            text-decoration: none;
+        }
+        #upload-form {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
     </style>
 </head>
 <body>
@@ -67,6 +113,15 @@
     </div>
     </br></br></br>
     <div id="result">
+    </div>
+
+    <div id="upload-form">
+        <!--    <form id="upload-form" action="http://localhost:50020/put" method="post" enctype="multipart/form-data">-->
+        <span><a href="javascript:;" class="file">选择文件
+            <input id="upload-input" type="file" name="file">
+        </a></span>
+        <span id="upload-button" onclick="upload()">上传</span>
+        <!--    </form>-->
     </div>
 </body>
 <script type="text/javascript">
@@ -127,9 +182,26 @@
        event.preventDefault();
        if (event.keyCode == 13 ) {
            document.getElementById("search").click();
-           // document.getElementById("search").style.background='green';
        }
     });
+
+    //js form-data file
+    function upload(){
+        const url = document.location.href
+        const xhr = new XMLHttpRequest();
+        let fileObj = document.getElementById('upload-input').files[0];
+        let form = new FormData();
+        form.append('file', fileObj);
+        xhr.open('POST', url + "put");
+        xhr.send(form);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4){
+                let res = JSON.parse(xhr.response);
+                alert(res.msg);
+            }
+        };
+
+    }
 
     //控制焦点在input中
     window.onload=function(){
