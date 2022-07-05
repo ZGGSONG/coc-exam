@@ -97,24 +97,36 @@ func Put(ctx *gin.Context) {
 	var mType, mQuestion, mOptions, mAnswer string
 	var usefulCount, uselessCount int64
 	msg := strings.Split(string(bytes), "\r\n")
+	var flag = false
 	for _, value := range msg {
 		//无效数据
 		if value == "" || value == "\n" {
 			continue
 		}
 		if strings.Contains(value, "单选题") {
+			flag = true
 			mType = "single"
 			continue
 		}
 		if strings.Contains(value, "多选题") {
+			flag = true
 			mType = "multiple"
 			continue
 		}
 		if strings.Contains(value, "判断题") {
+			flag = true
 			mType = "judgement"
 			continue
 		}
 
+		if !flag {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code": 400,
+				"msg":  "提交文件格式出错!!!",
+				"data": "",
+			})
+			return
+		}
 		//获取第一个字符
 		firstCharacter := regexp.MustCompile("^.").FindStringSubmatch(value)[0]
 		if strings.Contains("1234567890", firstCharacter) { //题目
