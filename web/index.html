@@ -46,6 +46,10 @@
         .m-options {
             color: #aaaaaa;
         }
+        .m-options-true {
+            color: green;
+            font-weight: bold;
+        }
         .m-answer {
             font-weight: bold;
         }
@@ -97,7 +101,17 @@
                 }
                 tmp += '</br>' + '<div class="m-question-title">' + '【' + type + '】' + orderId + '. ' + key.question + '</div>' + '</br>';
                 for (let i = 0; i < ops.length; i++) {
-                    tmp += '<div class="m-options">' + key.options.split(' ')[i] + '</div>';
+                    let flag = false;
+                    key.answer.split('、').forEach(function (value){
+                        if (key.options.split(' ')[i][0] == value) {
+                            flag = true;
+                        }
+                    });
+                    if (flag) {
+                        tmp += '<div class="m-options-true">' + key.options.split(' ')[i] + '</div>';
+                    } else {
+                        tmp += '<div class="m-options">' + key.options.split(' ')[i] + '</div>';
+                    }
                 }
                 tmp +='</br>' + '<div class="m-answer">参考答案: ' + key.answer + '</div>' + '</br>';
                 tmp += '<hr>'
@@ -112,7 +126,17 @@
        event.preventDefault();
        if (event.keyCode == 13 ) {
            document.getElementById("search").click();
+           // document.getElementById("search").style.background='green';
        }
     });
+
+    //控制焦点在input中
+    window.onload=function(){
+        let input=document.getElementById("input");
+        input.focus();
+        input.onblur=function(){
+            input.focus();
+        };
+    }
 </script>
 </html>
