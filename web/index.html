@@ -20,7 +20,7 @@
             background-repeat: no-repeat;
             background-size: 25px;
             background-position:5px center;
-            padding:0 0 0 40px;
+            padding:0 0 0 20px;
         }
         #search{
             width: 78px;
@@ -39,6 +39,7 @@
             left: 50%;
         }
         .m-question-title {
+            transform:translateX(-20px);
             font-size: 20px;
             font-weight: bold;
         }
@@ -78,10 +79,12 @@
         const txt=xmlHttp.responseText;
         const obj = JSON.parse(txt);
         let tmp = '';
+        let orderId = 0;
         if(obj.data.length > 0){
             for (let key of obj.data) {
                 let ops = key.options.split(' ')
                 let type = '';
+                orderId++;
                 switch (key.type) {
                     case 'single':
                         type = '单选';
@@ -92,7 +95,7 @@
                     default:
                         type = '判断';
                 }
-                tmp += '</br>' + '<div class="m-question-title">' + '【' + type + '】 ' + key.question + '</div>' + '</br>';
+                tmp += '</br>' + '<div class="m-question-title">' + '【' + type + '】' + orderId + '. ' + key.question + '</div>' + '</br>';
                 for (let i = 0; i < ops.length; i++) {
                     tmp += '<div class="m-options">' + key.options.split(' ')[i] + '</div>';
                 }

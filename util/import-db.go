@@ -58,7 +58,8 @@ func main() {
 		//获取第一个字符
 		firstCharacter := regexp.MustCompile("^.").FindStringSubmatch(value)[0]
 		if strings.Contains("1234567890", firstCharacter) { //题目
-			mQuestion = value
+			com := strings.Index(value, ".")
+			mQuestion = value[com+1:] //取出结果
 		} else if strings.Contains("ABCDEFGHIJK", firstCharacter) { //选项
 			if strings.Contains(value, "、") {
 				mOptions += value + " "
