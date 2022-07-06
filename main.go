@@ -29,13 +29,18 @@ var commands = map[string]string{
 	"linux":   "xdg-open",
 }
 
-func Open(uri string) error {
+func Open(url string) error {
 	run, ok := commands[runtime.GOOS]
 	if !ok {
 		return fmt.Errorf("don't know how to open things on %s platform", runtime.GOOS)
 	}
-
-	cmd := exec.Command(run, uri)
+	//windows
+	if run == "start" {
+		cmd := exec.Command("cmd", "/c", run, url)
+		return cmd.Start()
+	}
+	//darwin
+	cmd := exec.Command(run, url)
 	return cmd.Start()
 }
 func main() {
