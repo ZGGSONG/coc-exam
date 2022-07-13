@@ -163,3 +163,20 @@ func Put(ctx *gin.Context) {
 		"data": "",
 	})
 }
+
+func GetInfo(ctx *gin.Context) {
+	var datas []model.CountData
+	var _model []model.Subject
+	var count int64
+	global.GLO_DB.Model(&_model).Where("type = ?", "single").Count(&count)
+	datas = append(datas, model.CountData{Type: "single", Count: count})
+	global.GLO_DB.Model(&_model).Where("type = ?", "multiple").Count(&count)
+	datas = append(datas, model.CountData{Type: "multiple", Count: count})
+	global.GLO_DB.Model(&_model).Where("type = ?", "judgement").Count(&count)
+	datas = append(datas, model.CountData{Type: "judgement", Count: count})
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  "success",
+		"data": datas,
+	})
+}

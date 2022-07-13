@@ -11,3 +11,8 @@ type Subject struct {
 	UpdateTime time.Time `gorm:"column:UpdateTime;type:time;not null" json:"updateTime"`
 	Remark     string    `gorm:"column:Remark;type:varchar(255)" json:"remark"`
 }
+
+type CountData struct {
+	Type  string `json:"type"`
+	Count int64  `json:"count"`
+}
