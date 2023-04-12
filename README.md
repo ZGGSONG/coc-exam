@@ -12,7 +12,7 @@
 
 ## 作者
 
-**coc-exam** © [zggsong](https://github.com/zggsong), Released under the [MIT](https://github.com/ZGGSONG/coc-exam/blob/main/LICENSE) License.<br>
+**coc-exam** © [zggsong](https://github.com/zggsong), Released under the [MIT](https://github.com/ZGGSONG/coc-exam/blob/master/LICENSE) License.<br>
 Thanks to the following articles [gin embed](http://ningmo.github.io/2021/05/21/go/gin%20embed%E6%89%93%E5%8C%85%E7%A4%BA%E4%BE%8B/index.html).
 
 > Website [Blog](https://www.zggsong.com) · GitHub [@zggsong](https://github.com/zggsong)
